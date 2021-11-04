@@ -1,2 +1,2 @@
-# QuickScripts
-Basic Unity scripts that can be used with most/any project.
+# Custom Frameworks
+Generic scripts and frameworks for systems I've created over the years.
