@@ -1,21 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class ConditionNode : Node
 {
-    public delegate NodeState ConditionNodeDelegate();
+    private Func<bool> condition;
 
-    private ConditionNodeDelegate condition;
-
-    public ConditionNode(ConditionNodeDelegate condition)
+    public ConditionNode(Func<bool> condition)
     {
         this.condition = condition;
     }
 
     public override NodeState Evaluate(float deltaTime)
     {
-        CurrentState = condition();
+        CurrentState = ConvertToNodeState(condition());
         return CurrentState;
+    }
+
+    private NodeState ConvertToNodeState(bool condition)
+    {
+        if (condition == true)
+        {
+            return NodeState.SUCCESS;
+        }
+        else
+        {
+            return NodeState.FAILURE;
+        }
     }
 }

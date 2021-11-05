@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Behaviour Tree\SequenceNode.cs" />
     <Compile Include="Assets\Scripts\Behaviour Tree\SelectorNode.cs" />
     <Compile Include="Assets\Scripts\Behaviour Tree\WaitNode.cs" />
+    <Compile Include="Assets\Scripts\TestScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

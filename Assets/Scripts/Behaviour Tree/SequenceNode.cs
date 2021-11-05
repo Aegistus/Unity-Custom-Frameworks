@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SequenceNode : Node
 {
@@ -9,6 +10,11 @@ public class SequenceNode : Node
     public SequenceNode(List<Node> childNodes)
     {
         this.childNodes = childNodes;
+    }
+
+    public SequenceNode(ICollection<Node> childNodes)
+    {
+        this.childNodes = childNodes.ToList();
     }
 
     public override NodeState Evaluate(float deltaTime)
