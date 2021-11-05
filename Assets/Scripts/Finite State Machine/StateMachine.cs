@@ -71,7 +71,7 @@ public class StateMachine
     /// <summary>
     /// Should be placed in an Update loop. Checks for fulfilled transition conditions and executes the current state's DuringExecution().
     /// </summary>
-    public void ExecuteState()
+    public void ExecuteState(float deltaTime)
     {
         if (CurrentState == null)
         {
@@ -84,7 +84,7 @@ public class StateMachine
         {
             SwitchToNewState(nextState);
         }
-        CurrentState.DuringExecution();
+        CurrentState.DuringExecution(deltaTime);
     }
 
 }

@@ -6,6 +6,7 @@ public class Transition
     /// State this transition will go to if Condition == true.
     /// </summary>
     public Type ToState { get; }
+
     /// <summary>
     /// The condition that will activate this transition.
     /// </summary>

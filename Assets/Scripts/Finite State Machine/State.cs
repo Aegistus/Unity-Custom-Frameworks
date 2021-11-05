@@ -27,7 +27,7 @@ public abstract class State
     /// <summary>
     /// Called every frame while the state is active.
     /// </summary>
-    public abstract void DuringExecution();
+    public abstract void DuringExecution(float deltaTime);
     /// <summary>
     /// Called the frame after the state is active and before the next state.
     /// </summary>
