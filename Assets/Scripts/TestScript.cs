@@ -5,4 +5,11 @@ using UnityEngine;
 public class TestScript : MonoBehaviour
 {
 
+    private void Start()
+    {
+        SequenceNode root = new SequenceNode(new Node[]
+        {
+
+        });
+    }
 }

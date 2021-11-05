@@ -12,11 +12,10 @@ public class SequenceNode : Node
         this.childNodes = childNodes;
     }
 
-    public SequenceNode(ICollection<Node> childNodes)
+    public SequenceNode(Node[] childNodes)
     {
         this.childNodes = childNodes.ToList();
     }
-
     public override NodeState Evaluate(float deltaTime)
     {
         for (int i = 0; i < childNodes.Count; i++)

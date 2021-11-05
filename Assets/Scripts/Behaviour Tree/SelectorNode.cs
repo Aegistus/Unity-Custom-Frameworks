@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SelectorNode : Node
 {
@@ -9,6 +10,11 @@ public class SelectorNode : Node
     public SelectorNode(List<Node> childNodes)
     {
         this.childNodes = childNodes;
+    }
+
+    public SelectorNode(Node[] childNodes)
+    {
+        this.childNodes = childNodes.ToList();
     }
 
     public override NodeState Evaluate(float deltaTime)
