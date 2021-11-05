@@ -57,17 +57,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Audio\SoundGroup.cs" />
-    <Compile Include="Assets\Scripts\Behaviour Tree Base\Node.cs" />
     <Compile Include="Assets\Scripts\MultiDictionary\MultiDictionary.cs" />
     <Compile Include="Assets\Scripts\Finite State Machine\State.cs" />
     <Compile Include="Assets\Scripts\Finite State Machine\StateMachine.cs" />
-    <Compile Include="Assets\Scripts\Behaviour Tree Base\UnityNode.cs" />
-    <Compile Include="Assets\Scripts\Behaviour Tree Base\SelectorNode.cs" />
     <Compile Include="Assets\Scripts\Audio\Sound.cs" />
     <Compile Include="Assets\Scripts\Field of View\Scripts\FieldOfView.cs" />
     <Compile Include="Assets\Scripts\Finite State Machine\Transition.cs" />
     <Compile Include="Assets\Scripts\UI\LookAtCamera.cs" />
     <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\Behaviour Tree\Node.cs" />
+    <Compile Include="Assets\Scripts\Behaviour Tree\ConditionNode.cs" />
+    <Compile Include="Assets\Scripts\Behaviour Tree\ActionNode.cs" />
+    <Compile Include="Assets\Scripts\Behaviour Tree\InverterNode.cs" />
+    <Compile Include="Assets\Scripts\Behaviour Tree\NodeState.cs" />
+    <Compile Include="Assets\Scripts\Behaviour Tree\SequenceNode.cs" />
+    <Compile Include="Assets\Scripts\Behaviour Tree\SelectorNode.cs" />
+    <Compile Include="Assets\Scripts\Behaviour Tree\WaitNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
