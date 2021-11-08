@@ -11,7 +11,7 @@ public class AudioManager : MonoBehaviour
 
 	public AudioMixerGroup mixerGroup;
 
-	public SoundGroup[] soundGroups;
+	public Sound[] sounds;
 
 	private Queue<AudioSource> positionalSources = new Queue<AudioSource>();
 
@@ -26,13 +26,13 @@ public class AudioManager : MonoBehaviour
 			instance = this;
 			//DontDestroyOnLoad(gameObject);
 		}
-		foreach (SoundGroup g in soundGroups)
+		foreach (Sound s in sounds)
 		{
-			g.source = gameObject.AddComponent<AudioSource>();
-			g.source.clip = g.GetRandomAudioClip();
-			g.source.loop = g.loop;
+			s.source = gameObject.AddComponent<AudioSource>();
+			s.source.clip = s.GetRandomAudioClip();
+			s.source.loop = s.loop;
 
-			g.source.outputAudioMixerGroup = mixerGroup;
+			s.source.outputAudioMixerGroup = mixerGroup;
 		}
 		Transform positionalSourceParent = new GameObject("Positional Audio Sources").transform;
         for (int i = 0; i < numOfPositionalSources; i++)
@@ -51,7 +51,7 @@ public class AudioManager : MonoBehaviour
 		{
 			return;
 		}
-		SoundGroup group = Array.Find(soundGroups, item => item.name == soundGroupName);
+		Sound group = Array.Find(sounds, item => item.nameID == soundGroupName);
 		if (group == null)
 		{
 			Debug.LogWarning("Sound Group: " + soundGroupName + " not found!");
@@ -71,7 +71,7 @@ public class AudioManager : MonoBehaviour
 		{
 			return;
 		}
-		SoundGroup group = Array.Find(soundGroups, item => item.name == soundGroupName);
+		Sound group = Array.Find(sounds, item => item.nameID == soundGroupName);
 		if (group == null)
 		{
 			Debug.LogWarning("Sound Group: " + soundGroupName + " not found!");
@@ -99,7 +99,7 @@ public class AudioManager : MonoBehaviour
 		positionalSources.Enqueue(source);
 	}
 
-	public void PlaySoundAtPosition(SoundGroup sound, Vector3 position)
+	public void PlaySoundAtPosition(Sound sound, Vector3 position)
     {
 		AudioSource source = positionalSources.Dequeue();
 		source.pitch = sound.pitch;
@@ -112,7 +112,7 @@ public class AudioManager : MonoBehaviour
 
 	public void StopPlaying(string soundName)
 	{
-		SoundGroup sound = Array.Find(soundGroups, item => item.name == soundName);
+		Sound sound = Array.Find(sounds, item => item.nameID == soundName);
 		if (sound == null)
 		{
 			Debug.LogWarning("Sound: " + soundName + " not found!");

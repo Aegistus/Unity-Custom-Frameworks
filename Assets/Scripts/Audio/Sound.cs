@@ -1,15 +1,17 @@
-﻿using UnityEngine.Audio;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
-[System.Serializable]
-public class Sound {
+[CreateAssetMenu(fileName = "NewSound", menuName = "Sound")]
+public class Sound : ScriptableObject
+{
+    public string nameID;
 
-	public string name;
-
-	public AudioClip clip;
+    public AudioClip[] audioVariants;
 
 	[Range(0f, 1f)]
-	public float volume = .75f;
+	public float volume = 1f;
 	[Range(0f, 1f)]
 	public float volumeVariance = .1f;
 
@@ -25,4 +27,13 @@ public class Sound {
 
 	[HideInInspector]
 	public AudioSource source;
+
+	public AudioClip GetRandomAudioClip()
+    {
+		if (audioVariants.Length == 0)
+        {
+			return null;
+        }
+		return audioVariants[Random.Range(0, audioVariants.Length)];
+    }
 }
