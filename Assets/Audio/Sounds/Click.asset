@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Click
   m_EditorClassIdentifier: 
   nameID: 
-  allSounds: []
-  volume: 0.75
+  audioVariants:
+  - {fileID: 8300000, guid: df5bab4476dca9c4785eb6edf3d07405, type: 3}
+  volume: 1
   volumeVariance: 0.1
   pitch: 1
   pitchVariance: 0.1

@@ -11,7 +11,8 @@ public class AudioManager : MonoBehaviour
 
 	public AudioMixerGroup mixerGroup;
 
-	public Sound[] sounds;
+	[SerializeField]
+	private Sound[] sounds;
 
 	private Queue<AudioSource> positionalSources = new Queue<AudioSource>();
 
@@ -31,7 +32,6 @@ public class AudioManager : MonoBehaviour
 			s.source = gameObject.AddComponent<AudioSource>();
 			s.source.clip = s.GetRandomAudioClip();
 			s.source.loop = s.loop;
-
 			s.source.outputAudioMixerGroup = mixerGroup;
 		}
 		Transform positionalSourceParent = new GameObject("Positional Audio Sources").transform;
@@ -45,90 +45,82 @@ public class AudioManager : MonoBehaviour
         }
 	}
 
-	public void PlaySound(string soundGroupName)
+	/// <summary>
+	/// Get the integer ID from a Sound name
+	/// </summary>
+	/// <param name="name"></param>
+	/// <returns>The ID of Sound with name. -1 if no such name.</returns>
+	public int GetSoundID(string name)
     {
-		if (soundGroupName == "")
-		{
-			return;
-		}
-		Sound group = Array.Find(sounds, item => item.nameID == soundGroupName);
-		if (group == null)
-		{
-			Debug.LogWarning("Sound Group: " + soundGroupName + " not found!");
-			return;
-		}
+		int id = Array.FindIndex(sounds, sound => sound.Name == name);
+		if (id == -1)
+        {
+			Debug.LogWarning("Sound with name: " + name + " does not exist!");
+        }
+		return id;
+    }
 
-		group.source.clip = group.GetRandomAudioClip();
-		group.source.volume = group.volume * (1f + UnityEngine.Random.Range(-group.volumeVariance / 2f, group.volumeVariance / 2f));
-		group.source.pitch = group.pitch * (1f + UnityEngine.Random.Range(-group.pitchVariance / 2f, group.pitchVariance / 2f));
+	public AudioSource PlaySound(string soundName)
+    {
+		return PlaySound(GetSoundID(soundName));
+    }
 
-		group.source.Play();
+	public AudioSource PlaySound(int soundID)
+    {
+		if (soundID < 0 || soundID >= sounds.Length)
+		{
+			Debug.LogWarning("Invalid Sound ID: " + soundID);
+			return null;
+		}
+		Sound sound = sounds[soundID];
+
+		sound.source.clip = sound.GetRandomAudioClip();
+		sound.source.volume = sound.volume * (1f + UnityEngine.Random.Range(-sound.volumeVariance / 2f, sound.volumeVariance / 2f));
+		sound.source.pitch = sound.pitch * (1f + UnityEngine.Random.Range(-sound.pitchVariance / 2f, sound.pitchVariance / 2f));
+
+		sound.source.Play();
+		return sound.source;
 	}
 
-	public void PlaySoundAtPosition(string soundGroupName, Vector3 position)
+	public AudioSource PlaySoundAtPosition(string soundName, Vector3 position)
     {
-		if (soundGroupName == "")
+		return PlaySoundAtPosition(GetSoundID(soundName), position);
+    }
+
+	public AudioSource PlaySoundAtPosition(int soundID, Vector3 position)
+    {
+		if (soundID < 0 || soundID >= sounds.Length)
 		{
-			return;
+			Debug.LogWarning("Invalid Sound ID: " + soundID);
+			return null;
 		}
-		Sound group = Array.Find(sounds, item => item.nameID == soundGroupName);
-		if (group == null)
-		{
-			Debug.LogWarning("Sound Group: " + soundGroupName + " not found!");
-			return;
-		}
-
-		group.source.volume = group.volume * (1f + UnityEngine.Random.Range(-group.volumeVariance / 2f, group.volumeVariance / 2f));
-		group.source.minDistance = group.minimunDistance;
+		Sound sound = sounds[soundID];
 
 		AudioSource source = positionalSources.Dequeue();
-		source.pitch = group.pitch * (1f + UnityEngine.Random.Range(-group.pitchVariance / 2f, group.pitchVariance / 2f));
-		source.transform.position = position;
-		source.clip = group.GetRandomAudioClip();
-		source.Play();
-		positionalSources.Enqueue(source);
-	}
-
-	public void PlaySoundAtPosition(AudioClip sound, Vector3 position)
-    {
-		AudioSource source = positionalSources.Dequeue();
-		source.pitch = 1;
-		source.transform.position = position;
-		source.clip = sound;
-		source.Play();
-		positionalSources.Enqueue(source);
-	}
-
-	public void PlaySoundAtPosition(Sound sound, Vector3 position)
-    {
-		AudioSource source = positionalSources.Dequeue();
-		source.pitch = sound.pitch;
-		source.volume = sound.volume;
+		source.volume = sound.volume * (1f + UnityEngine.Random.Range(-sound.volumeVariance / 2f, sound.volumeVariance / 2f));
+		source.pitch = sound.pitch * (1f + UnityEngine.Random.Range(-sound.pitchVariance / 2f, sound.pitchVariance / 2f));
+		source.minDistance = sound.minimunDistance;
 		source.transform.position = position;
 		source.clip = sound.GetRandomAudioClip();
 		source.Play();
 		positionalSources.Enqueue(source);
+		return source;
 	}
 
-	public void StopPlaying(string soundName)
-	{
-		Sound sound = Array.Find(sounds, item => item.nameID == soundName);
-		if (sound == null)
-		{
-			Debug.LogWarning("Sound: " + soundName + " not found!");
-			return;
-		}
-		if (soundName == "")
-		{
-			return;
-		}
-
+	public void StopPlaying(int soundID)
+    {
+		Sound sound = sounds[soundID];
 		if (sound.source != null)
-        {
+		{
 			sound.source.volume = sound.volume * (1f + UnityEngine.Random.Range(-sound.volumeVariance / 2f, sound.volumeVariance / 2f));
 			sound.source.pitch = sound.pitch * (1f + UnityEngine.Random.Range(-sound.pitchVariance / 2f, sound.pitchVariance / 2f));
 
 			sound.source.Stop();
 		}
+	}
+
+	public void StopPlaying(string soundName)
+	{
+		StopPlaying(GetSoundID(soundName));
 	}
 }

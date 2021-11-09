@@ -154,7 +154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numOfPositionalSources: 100
   mixerGroup: {fileID: 0}
-  soundGroups: []
+  sounds:
+  - {fileID: 11400000, guid: a292d8d29d877544ba931cbc796e64c7, type: 2}
 --- !u!4 &648489647
 Transform:
   m_ObjectHideFlags: 0

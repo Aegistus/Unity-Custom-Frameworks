@@ -6,7 +6,10 @@ using UnityEngine.Audio;
 [CreateAssetMenu(fileName = "NewSound", menuName = "Sound")]
 public class Sound : ScriptableObject
 {
-    public string nameID;
+	public string Name => nameID;
+
+	[SerializeField]
+    private string nameID;
 
     public AudioClip[] audioVariants;
 
