@@ -4,9 +4,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class AudioManager : MonoBehaviour
+public class SoundManager : MonoBehaviour
 {
-	public static AudioManager instance;
+	public static SoundManager instance;
 	public int numOfPositionalSources = 100;
 
 	public AudioMixerGroup mixerGroup;
