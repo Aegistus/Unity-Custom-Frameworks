@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8af0e3fab035dc419adb6218dd391f1, type: 3}
   m_Name: Click
   m_EditorClassIdentifier: 
-  nameID: 
+  soundName: Click
   audioVariants:
   - {fileID: 8300000, guid: df5bab4476dca9c4785eb6edf3d07405, type: 3}
   volume: 1
