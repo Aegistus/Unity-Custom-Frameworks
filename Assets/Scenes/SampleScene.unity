@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundNames:
-  - Click
+  - Rocket
 --- !u!4 &347218105
 Transform:
   m_ObjectHideFlags: 0
@@ -201,6 +201,7 @@ MonoBehaviour:
   mixerGroup: {fileID: 0}
   sounds:
   - {fileID: 11400000, guid: a292d8d29d877544ba931cbc796e64c7, type: 2}
+  - {fileID: 11400000, guid: cf54092115773e7459d02c2037fd768d, type: 2}
 --- !u!4 &648489647
 Transform:
   m_ObjectHideFlags: 0

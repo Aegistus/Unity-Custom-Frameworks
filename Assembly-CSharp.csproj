@@ -71,9 +71,9 @@
     <Compile Include="Assets\Scripts\Behaviour Tree\InverterNode.cs" />
     <Compile Include="Assets\Scripts\Field of View\Scripts\FieldOfView.cs" />
     <Compile Include="Assets\Scripts\Finite State Machine\Transition.cs" />
+    <Compile Include="Assets\Test\SoundTest.cs" />
     <Compile Include="Assets\Scripts\UI\LookAtCamera.cs" />
     <Compile Include="Assets\Scripts\Audio\SoundManager.cs" />
-    <Compile Include="Assets\Test\SoundTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
