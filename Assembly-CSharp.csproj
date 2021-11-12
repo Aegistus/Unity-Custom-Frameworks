@@ -65,7 +65,7 @@
     <Compile Include="Assets\Scripts\Behaviour Tree\ConditionNode.cs" />
     <Compile Include="Assets\Scripts\Finite State Machine\StateMachine.cs" />
     <Compile Include="Assets\Scripts\Behaviour Tree\NodeState.cs" />
-    <Compile Include="Assets\Scripts\TestScript.cs" />
+    <Compile Include="Assets\Test\TestScript.cs" />
     <Compile Include="Assets\Scripts\Behaviour Tree\SelectorNode.cs" />
     <Compile Include="Assets\Scripts\Behaviour Tree\WaitNode.cs" />
     <Compile Include="Assets\Scripts\Behaviour Tree\InverterNode.cs" />
@@ -74,8 +74,29 @@
     <Compile Include="Assets\Test\SoundTest.cs" />
     <Compile Include="Assets\Scripts\UI\LookAtCamera.cs" />
     <Compile Include="Assets\Scripts\Audio\SoundManager.cs" />
+    <Compile Include="Assets\Scripts\DebugExtensions\Popup.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\Button_Sprite.cs" />
+    <Compile Include="Assets\CodeMonkey\MonoBehaviours\CameraFollow.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\FunctionPeriodic.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\UI_Sprite.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\World_Bar.cs" />
+    <Compile Include="Assets\CodeMonkey\Assets.cs" />
+    <Compile Include="Assets\CodeMonkey\MonoBehaviours\ComponentActions.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\UI_Bar.cs" />
+    <Compile Include="Assets\CodeMonkey\MonoBehaviours\PositionRendererSorter.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\UI_BarMultiple.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\World_Mesh.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\UtilsClass.cs" />
+    <Compile Include="Assets\CodeMonkey\CMDebug.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\Button_UI.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\FunctionUpdater.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\FunctionTimer.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\World_Sprite.cs" />
+    <Compile Include="Assets\CodeMonkey\MonoBehaviours\CameraFollowSetup.cs" />
+    <Compile Include="Assets\CodeMonkey\Utils\UI_TextComplex.cs" />
   </ItemGroup>
   <ItemGroup>
+     <None Include="Assets\CodeMonkey\README.txt" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Users\joeba\Documents\Game Dev\Unity\Versions\2021.1.1f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
