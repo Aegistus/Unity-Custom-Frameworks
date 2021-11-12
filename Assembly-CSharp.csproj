@@ -94,6 +94,7 @@
     <Compile Include="Assets\CodeMonkey\Utils\World_Sprite.cs" />
     <Compile Include="Assets\CodeMonkey\MonoBehaviours\CameraFollowSetup.cs" />
     <Compile Include="Assets\CodeMonkey\Utils\UI_TextComplex.cs" />
+    <Compile Include="Assets\Scripts\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\CodeMonkey\README.txt" />
