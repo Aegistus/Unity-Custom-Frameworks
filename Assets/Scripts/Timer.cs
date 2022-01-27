@@ -3,39 +3,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Timer
+namespace Aegis
 {
-    private static GameObject timerObject;
-
-    private class ComponentHook : MonoBehaviour
+    public class Timer
     {
-        public Action OnFinish;
-        public float timerLength;
-        private float timer = 0f;
+        private static GameObject timerObject;
 
-        private void Update()
+        private class ComponentHook : MonoBehaviour
         {
-            if (timer >= timerLength)
+            public Action OnFinish;
+            public Action<float> OnTick;
+            public float timerLength;
+            private float timer = 0f;
+
+            private void Update()
             {
-                OnFinish();
-                Destroy(this);
-            }
-            else
-            {
-                timer += Time.deltaTime;
+                if (timer >= timerLength)
+                {
+                    OnFinish();
+                    Destroy(this);
+                }
+                else
+                {
+                    if (OnTick != null)
+                    {
+                        OnTick.Invoke(Time.deltaTime);
+                    }
+                    timer += Time.deltaTime;
+                }
             }
         }
-    }
 
-    public static void CreateTimer(Action OnFinish, float timerLength)
-    {
-        if (timerObject == null)
+        public static void SetTimer(Action OnFinish, float timerLength)
         {
-            timerObject = new GameObject("Timers");
+            if (timerObject == null)
+            {
+                timerObject = new GameObject("Timers");
+            }
+            ComponentHook hook = timerObject.AddComponent<ComponentHook>();
+            hook.timerLength = timerLength;
+            hook.OnFinish = OnFinish;
         }
-        ComponentHook hook = timerObject.AddComponent<ComponentHook>();
-        hook.timerLength = timerLength;
-        hook.OnFinish = OnFinish;
-    }
 
+        public static void SetTimer(Action OnFinish, Action<float> OnTick, float timerLength)
+        {
+            if (timerObject == null)
+            {
+                timerObject = new GameObject("Timers");
+            }
+            ComponentHook hook = timerObject.AddComponent<ComponentHook>();
+            hook.timerLength = timerLength;
+            hook.OnFinish = OnFinish;
+            hook.OnTick = OnTick;
+        }
+
+    }
 }
