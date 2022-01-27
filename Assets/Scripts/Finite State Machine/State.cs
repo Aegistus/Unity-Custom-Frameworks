@@ -41,7 +41,7 @@ public abstract class State
     {
         for (int i = 0; i < transitionsTo.Count; i++)
         {
-            if (transitionsTo[i].Condition())
+            if (transitionsTo[i].Check())
             {
                 return transitionsTo[i].ToState;
             }

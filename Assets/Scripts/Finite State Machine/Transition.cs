@@ -10,23 +10,46 @@ public class Transition
     /// <summary>
     /// The condition that will activate this transition.
     /// </summary>
-    public Func<bool> Condition { get; }
+    Func<bool> condition { get; }
+
+    bool manuallyTriggered = false;
 
     public Transition(Type toState, Func<bool> condition)
     {
         ToState = toState;
-        Condition = condition;
+        this.condition = condition;
     }
 
     public Transition(Type toState, Func<bool> condition1, Func<bool> condition2)
     {
         ToState = toState;
-        Condition = () => condition1() && condition2();
+        condition = () => condition1() && condition2();
     }
 
     public Transition(Type toState, Func<bool> condition1, Func<bool> condition2, Func<bool> condition3)
     {
         ToState = toState;
-        Condition = () => condition1() && condition2() && condition3();
+        condition = () => condition1() && condition2() && condition3();
+    }
+
+    /// <summary>
+    /// Use to manually trigger the transition. Subscribe to an event for an event-based transition.
+    /// </summary>
+    public void ManuallyTrigger()
+    {
+        manuallyTriggered = true;
+    }
+
+    public bool Check()
+    {
+        if (manuallyTriggered)
+        {
+            manuallyTriggered = false;
+            return true;
+        }
+        else
+        {
+            return condition();
+        }
     }
 }

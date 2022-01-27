@@ -59,7 +59,7 @@ public class StateMachine
     {
         for (int i = 0; i < anyStateTransitions.Count; i++)
         {
-            if (anyStateTransitions[i].Condition())
+            if (anyStateTransitions[i].Check())
             {
                 return anyStateTransitions[i].ToState;
             }
