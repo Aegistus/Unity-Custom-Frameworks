@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PoolManager : MonoBehaviour
 {
     public static PoolManager Instance { get; private set; }
-    public List<Pool> pools;
+    public Pool[] pools;
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class PoolManager : MonoBehaviour
     public class Pool
     {
         [SerializeField] string objectName;
+        public string Name => objectName;
         public GameObject objectPrefab;
         public int size;
         private Queue<PoolObject> inPool = new Queue<PoolObject>();
@@ -59,7 +61,12 @@ public class PoolManager : MonoBehaviour
     PoolObject objectFromPool;
     public GameObject GetObjectOfTypeFromPool(int objectID, Vector3 position, Quaternion rotation)
     {
-        for (int i = 0; i < pools.Count; i++)
+        if (objectID < 0 || objectID >= pools.Length)
+        {
+            Debug.LogWarning("Invalid Pool Object ID");
+            return null;
+        }
+        for (int i = 0; i < pools.Length; i++)
         {
             if (pools[i].GetObjectID() == objectID)
             {
@@ -76,7 +83,12 @@ public class PoolManager : MonoBehaviour
 
     public GameObject GetObjectFromPoolWithLifeTime(int objectID, Vector3 position, Quaternion rotation, float lifeTime)
     {
-        for (int i = 0; i < pools.Count; i++)
+        if (objectID < 0 || objectID >= pools.Length)
+        {
+            Debug.LogWarning("Invalid Pool Object ID");
+            return null;
+        }
+        for (int i = 0; i < pools.Length; i++)
         {
             if (pools[i].GetObjectID() == objectID)
             {
@@ -94,7 +106,12 @@ public class PoolManager : MonoBehaviour
 
     public GameObject GetObjectFromPoolWithLifeTime(int objectID, Vector3 position, Quaternion rotation, Vector3 scale, float lifeTime)
     {
-        for (int i = 0; i < pools.Count; i++)
+        if (objectID < 0 || objectID >= pools.Length)
+        {
+            Debug.LogWarning("Invalid Pool Object ID");
+            return null;
+        }
+        for (int i = 0; i < pools.Length; i++)
         {
             if (pools[i].GetObjectID() == objectID)
             {
@@ -109,5 +126,10 @@ public class PoolManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public int GetPoolObjectID(string objectName)
+    {
+        return Array.FindIndex(pools, pool => pool.Name == objectName);
     }
 }

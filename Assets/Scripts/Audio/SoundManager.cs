@@ -106,4 +106,14 @@ public class SoundManager : MonoBehaviour
 			sound.source.Stop();
 		}
 	}
+
+	public int GetSoundID(string name)
+    {
+		int id = Array.FindIndex(sounds, sound => sound.Name == name);
+		if (id == -1)
+        {
+			Debug.LogWarning("Sound with name: " + name + " does not exist!");
+        }
+		return id;
+    }
 }
