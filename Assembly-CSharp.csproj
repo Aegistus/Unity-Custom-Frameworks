@@ -75,6 +75,8 @@
      <Compile Include="Assets\Scripts\Audio\SoundManager.cs" />
      <Compile Include="Assets\CodeMonkey\CMDebug.cs" />
      <Compile Include="Assets\CodeMonkey\Utils\FunctionPeriodic.cs" />
+     <Compile Include="Assets\Scripts\Object Pooling\PoolManager.cs" />
+     <Compile Include="Assets\Scripts\Object Pooling\PoolObject.cs" />
      <None Include="Assets\CodeMonkey\README.txt" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Users/joeba/Documents/Game Dev/Unity/Versions/2021.1.1f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
