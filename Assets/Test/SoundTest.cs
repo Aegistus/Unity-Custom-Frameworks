@@ -12,19 +12,19 @@ public class SoundTest : MonoBehaviour
 
     void Start()
     {
-        soundManager = SoundManager.instance;
+        soundManager = SoundManager.Instance;
         soundIDs = new int[soundNames.Length];
-        for (int i = 0; i < soundNames.Length; i++)
-        {
-            soundIDs[i] = soundManager.GetSoundID(soundNames[i]);
-        }
+        // for (int i = 0; i < soundNames.Length; i++)
+        // {
+        //     soundIDs[i] = soundManager.GetSoundID(soundNames[i]);
+        // }
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            soundManager.PlaySound(soundIDs[0]);
+            soundManager.PlaySoundGlobal(soundIDs[0]);
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {

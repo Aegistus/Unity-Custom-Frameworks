@@ -6,8 +6,6 @@ using UnityEngine.Audio;
 [CreateAssetMenu(fileName = "NewSound", menuName = "Sound")]
 public class Sound : ScriptableObject
 {
-	public string Name => soundName;
-
 	[SerializeField]
     private string soundName;
 
@@ -39,4 +37,9 @@ public class Sound : ScriptableObject
         }
 		return audioVariants[Random.Range(0, audioVariants.Length)];
     }
+
+	public static int GetSoundID(string soundName)
+	{
+		return soundName.GetHashCode();
+	}
 }

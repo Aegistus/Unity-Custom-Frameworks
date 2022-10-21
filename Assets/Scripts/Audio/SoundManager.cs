@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class SoundManager : MonoBehaviour
 {
-	public static SoundManager instance;
+	public static SoundManager Instance { get; private set; }
 	public int numOfPositionalSources = 100;
 
 	public AudioMixerGroup mixerGroup;
@@ -18,13 +18,13 @@ public class SoundManager : MonoBehaviour
 
 	void Awake()
 	{
-		if (instance != null)
+		if (Instance != null)
 		{
 			Destroy(gameObject);
 		}
 		else
 		{
-			instance = this;
+			Instance = this;
 			//DontDestroyOnLoad(gameObject);
 		}
 		foreach (Sound s in sounds)
@@ -46,26 +46,11 @@ public class SoundManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Get the integer ID from a Sound name
+	/// Play sound with ID globally.
 	/// </summary>
-	/// <param name="name"></param>
-	/// <returns>The ID of Sound with name. -1 if no such name.</returns>
-	public int GetSoundID(string name)
-    {
-		int id = Array.FindIndex(sounds, sound => sound.Name == name);
-		if (id == -1)
-        {
-			Debug.LogWarning("Sound with name: " + name + " does not exist!");
-        }
-		return id;
-    }
-
-	public AudioSource PlaySound(string soundName)
-    {
-		return PlaySound(GetSoundID(soundName));
-    }
-
-	public AudioSource PlaySound(int soundID)
+	/// <param soundID="soundID"></param>
+	/// <returns>The AudioSource that is playing the sound. null if not found.</returns>
+	public AudioSource PlaySoundGlobal(int soundID)
     {
 		if (soundID < 0 || soundID >= sounds.Length)
 		{
@@ -81,11 +66,6 @@ public class SoundManager : MonoBehaviour
 		sound.source.Play();
 		return sound.source;
 	}
-
-	public AudioSource PlaySoundAtPosition(string soundName, Vector3 position)
-    {
-		return PlaySoundAtPosition(GetSoundID(soundName), position);
-    }
 
 	public AudioSource PlaySoundAtPosition(int soundID, Vector3 position)
     {
@@ -103,11 +83,19 @@ public class SoundManager : MonoBehaviour
 		source.transform.position = position;
 		source.clip = sound.GetRandomAudioClip();
 		source.Play();
+		source.transform.SetParent(null); // in case parent has been set before.
 		positionalSources.Enqueue(source);
 		return source;
 	}
 
-	public void StopPlaying(int soundID)
+	public AudioSource PlaySoundAtPosition(int soundID, Vector3 position, Transform parent)
+	{
+		AudioSource source = PlaySoundAtPosition(soundID, position);
+		source.transform.SetParent(parent);
+		return source;
+	}
+
+	public void StopPlayingGlobal(int soundID)
     {
 		Sound sound = sounds[soundID];
 		if (sound.source != null)
@@ -117,10 +105,5 @@ public class SoundManager : MonoBehaviour
 
 			sound.source.Stop();
 		}
-	}
-
-	public void StopPlaying(string soundName)
-	{
-		StopPlaying(GetSoundID(soundName));
 	}
 }
