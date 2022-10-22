@@ -48,8 +48,8 @@ public class SoundManager : MonoBehaviour
 	/// <summary>
 	/// Play sound with ID globally.
 	/// </summary>
-	/// <param soundID="soundID"></param>
-	/// <returns>The AudioSource that is playing the sound. null if not found.</returns>
+	/// <param soundID="soundID"> The ID for the sound. Can be retrieved with GetSoundID().</param>
+	/// <returns>The AudioSource that is playing the sound. null if sound not found.</returns>
 	public AudioSource PlaySoundGlobal(int soundID)
     {
 		if (soundID < 0 || soundID >= sounds.Length)
@@ -67,6 +67,11 @@ public class SoundManager : MonoBehaviour
 		return sound.source;
 	}
 
+	/// <summary>
+	/// Play sound with ID at the given position. The AudioSource will use 3D sound settings.
+	/// </summary>
+	/// <param soundID="soundID">The ID for the sound. Can be retrieved with GetSoundID().</param>
+	/// <returns>The AudioSource that is playing the sound. null if sound not found.</returns>
 	public AudioSource PlaySoundAtPosition(int soundID, Vector3 position)
     {
 		if (soundID < 0 || soundID >= sounds.Length)
@@ -88,6 +93,12 @@ public class SoundManager : MonoBehaviour
 		return source;
 	}
 
+	/// <summary>
+	/// Play sound with ID at position. Takes an extra parameter for parenting the AudioSource.
+	/// </summary>
+	/// <param soundID="soundID">The ID for the sound. Can be retrieved with GetSoundID().</param>
+	/// <param parent="parent"> The transform the AudioSource should be parented to. </param>
+	/// <returns>The AudioSource that is playing the sound. null if not found.</returns>
 	public AudioSource PlaySoundAtPosition(int soundID, Vector3 position, Transform parent)
 	{
 		AudioSource source = PlaySoundAtPosition(soundID, position);
@@ -95,6 +106,11 @@ public class SoundManager : MonoBehaviour
 		return source;
 	}
 
+	/// <summary>
+	/// Stops playing the sound with ID soundID.
+	/// </summary>
+	/// <param soundID="soundID">The ID for the sound. Can be retrieved with GetSoundID().</param>
+	/// <returns>The AudioSource that is playing the sound. null if not found.</returns>
 	public void StopPlayingGlobal(int soundID)
     {
 		Sound sound = sounds[soundID];
@@ -107,6 +123,13 @@ public class SoundManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Gets the integer identifier of a sound with string name. The ID will be greater than 0 and less than
+	/// the total number of sounds.
+	/// Logs a warning if the sound is not found.
+	/// </summary>
+	/// <param name="name">The name of the sound, defined in the Sound Scriptable Object.</param>
+	/// <returns>The soundID. -1 if the sound is not found.</returns>
 	public int GetSoundID(string name)
     {
 		int id = Array.FindIndex(sounds, sound => sound.Name == name);

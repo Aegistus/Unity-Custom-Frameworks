@@ -54,6 +54,11 @@ public class PoolManager : MonoBehaviour
     }
 
     PoolObject objectFromPool;
+    /// <summary>
+	/// Spawns a pool object with the given objectID at the given position and rotation.
+    /// Logs a warning if the objectID is invalid.
+	/// </summary>
+	/// <returns> The pool object's GameObject. null if the objectID is invalid. </returns>
     public GameObject SpawnObject(int objectID, Vector3 position, Quaternion rotation)
     {
         if (objectID < 0 || objectID >= pools.Length)
@@ -69,6 +74,12 @@ public class PoolManager : MonoBehaviour
         return objectFromPool.gameObject;
     }
 
+    /// <summary>
+	/// Spawns a pool object with the given objectID at the given position and rotation.
+    /// Also sets the object's lifetime to lifeTime.
+    /// Logs a warning if the objectID is invalid.
+	/// </summary>
+	/// <returns> The pool object's GameObject. null if the objectID is invalid. </returns>
     public GameObject SpawnObjectWithLifetime(int objectID, Vector3 position, Quaternion rotation, float lifeTime)
     {
         if (objectID < 0 || objectID >= pools.Length)
@@ -85,6 +96,11 @@ public class PoolManager : MonoBehaviour
         return objectFromPool.gameObject;
     }
 
+    /// <summary>
+	/// Spawns a pool object with the given objectID with the given position, rotation, and scale.
+    /// Logs a warning if the objectID is invalid.
+	/// </summary>
+	/// <returns> The pool object's GameObject. null if the objectID is invalid. </returns>
     public GameObject SpawnObjectWithLifetime(int objectID, Vector3 position, Quaternion rotation, Vector3 scale, float lifeTime)
     {
         if (objectID < 0 || objectID >= pools.Length)
@@ -103,8 +119,17 @@ public class PoolManager : MonoBehaviour
 
     }
 
+    /// <summary>
+	/// Gets the objectID of a poolObject given it's name.
+	/// </summary>
+	/// <returns> The PoolObject's integer ID. -1 if not found. </returns>
     public int GetPoolObjectID(string objectName)
     {
-        return Array.FindIndex(pools, pool => pool.Name == objectName);
+        int id = Array.FindIndex(pools, pool => pool.Name == objectName);
+		if (id == -1)
+        {
+			Debug.LogWarning("Pool Object with name: " + name + " does not exist!");
+        }
+		return id;
     }
 }

@@ -31,6 +31,10 @@ public class Sound : ScriptableObject
 	[HideInInspector]
 	public AudioSource source;
 
+	/// <summary>
+	/// Gets an audio clip from audioVariants.
+	/// </summary>
+	/// <returns>A random audio clip from audioVariants. </returns>
 	public AudioClip GetRandomAudioClip()
     {
 		if (audioVariants.Length == 0)
