@@ -51,11 +51,6 @@ public class PoolManager : MonoBehaviour
         {
             inPool.Enqueue(obj);
         }
-
-        public int GetObjectID()
-        {
-            return objectName.GetHashCode();
-        }
     }
 
     PoolObject objectFromPool;
@@ -66,19 +61,12 @@ public class PoolManager : MonoBehaviour
             Debug.LogWarning("Invalid Pool Object ID");
             return null;
         }
-        for (int i = 0; i < pools.Length; i++)
-        {
-            if (pools[i].GetObjectID() == objectID)
-            {
-                objectFromPool = pools[i].GetNextInQueue();
-                objectFromPool.transform.position = position;
-                objectFromPool.transform.rotation = rotation;
-                objectFromPool.gameObject.SetActive(true);
-                pools[i].PlaceInQueue(objectFromPool);
-                return objectFromPool.gameObject;
-            }
-        }
-        return null;
+        objectFromPool = pools[objectID].GetNextInQueue();
+        objectFromPool.transform.position = position;
+        objectFromPool.transform.rotation = rotation;
+        objectFromPool.gameObject.SetActive(true);
+        pools[objectID].PlaceInQueue(objectFromPool);
+        return objectFromPool.gameObject;
     }
 
     public GameObject GetObjectFromPoolWithLifeTime(int objectID, Vector3 position, Quaternion rotation, float lifeTime)
@@ -88,20 +76,13 @@ public class PoolManager : MonoBehaviour
             Debug.LogWarning("Invalid Pool Object ID");
             return null;
         }
-        for (int i = 0; i < pools.Length; i++)
-        {
-            if (pools[i].GetObjectID() == objectID)
-            {
-                objectFromPool = pools[i].GetNextInQueue();
-                objectFromPool.lifeTime = lifeTime;
-                objectFromPool.transform.position = position;
-                objectFromPool.transform.rotation = rotation;
-                objectFromPool.gameObject.SetActive(true);
-                pools[i].PlaceInQueue(objectFromPool);
-                return objectFromPool.gameObject;
-            }
-        }
-        return null;
+        objectFromPool = pools[objectID].GetNextInQueue();
+        objectFromPool.lifeTime = lifeTime;
+        objectFromPool.transform.position = position;
+        objectFromPool.transform.rotation = rotation;
+        objectFromPool.gameObject.SetActive(true);
+        pools[objectID].PlaceInQueue(objectFromPool);
+        return objectFromPool.gameObject;
     }
 
     public GameObject GetObjectFromPoolWithLifeTime(int objectID, Vector3 position, Quaternion rotation, Vector3 scale, float lifeTime)
@@ -111,21 +92,15 @@ public class PoolManager : MonoBehaviour
             Debug.LogWarning("Invalid Pool Object ID");
             return null;
         }
-        for (int i = 0; i < pools.Length; i++)
-        {
-            if (pools[i].GetObjectID() == objectID)
-            {
-                objectFromPool = pools[i].GetNextInQueue();
-                objectFromPool.lifeTime = lifeTime;
-                objectFromPool.transform.position = position;
-                objectFromPool.transform.rotation = rotation;
-                objectFromPool.transform.localScale = scale;
-                objectFromPool.gameObject.SetActive(true);
-                pools[i].PlaceInQueue(objectFromPool);
-                return objectFromPool.gameObject;
-            }
-        }
-        return null;
+        objectFromPool = pools[objectID].GetNextInQueue();
+        objectFromPool.lifeTime = lifeTime;
+        objectFromPool.transform.position = position;
+        objectFromPool.transform.rotation = rotation;
+        objectFromPool.transform.localScale = scale;
+        objectFromPool.gameObject.SetActive(true);
+        pools[objectID].PlaceInQueue(objectFromPool);
+        return objectFromPool.gameObject;
+
     }
 
     public int GetPoolObjectID(string objectName)
