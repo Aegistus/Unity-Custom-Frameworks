@@ -18,7 +18,7 @@ public class TestScript : MonoBehaviour
         {
             //Popup.CreateWorldPopup("Test", Vector3.zero, 12, Color.white, 5f);
             //Timer.CreateTimer(() => print("Timer test"), 4f);
-            PoolManager.Instance.GetObjectOfTypeFromPool(objectID, transform.position, transform.rotation);
+            PoolManager.Instance.SpawnObject(objectID, transform.position, transform.rotation);
         }
     }
 }

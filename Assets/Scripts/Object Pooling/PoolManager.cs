@@ -54,7 +54,7 @@ public class PoolManager : MonoBehaviour
     }
 
     PoolObject objectFromPool;
-    public GameObject GetObjectOfTypeFromPool(int objectID, Vector3 position, Quaternion rotation)
+    public GameObject SpawnObject(int objectID, Vector3 position, Quaternion rotation)
     {
         if (objectID < 0 || objectID >= pools.Length)
         {
@@ -69,7 +69,7 @@ public class PoolManager : MonoBehaviour
         return objectFromPool.gameObject;
     }
 
-    public GameObject GetObjectFromPoolWithLifeTime(int objectID, Vector3 position, Quaternion rotation, float lifeTime)
+    public GameObject SpawnObjectWithLifetime(int objectID, Vector3 position, Quaternion rotation, float lifeTime)
     {
         if (objectID < 0 || objectID >= pools.Length)
         {
@@ -85,7 +85,7 @@ public class PoolManager : MonoBehaviour
         return objectFromPool.gameObject;
     }
 
-    public GameObject GetObjectFromPoolWithLifeTime(int objectID, Vector3 position, Quaternion rotation, Vector3 scale, float lifeTime)
+    public GameObject SpawnObjectWithLifetime(int objectID, Vector3 position, Quaternion rotation, Vector3 scale, float lifeTime)
     {
         if (objectID < 0 || objectID >= pools.Length)
         {
