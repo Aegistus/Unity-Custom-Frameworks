@@ -10,11 +10,15 @@ public class SoundManager : MonoBehaviour
 	public int numOfPositionalSources = 100;
 
 	public AudioMixerGroup mixerGroup;
+	[SerializeField] string soundPath;
 
-	[SerializeField]
+	//[SerializeField]
 	private Sound[] sounds;
 
-	private Queue<AudioSource> positionalSources = new Queue<AudioSource>();
+	private Queue<PositionalAudioSource> positionalSources = new Queue<PositionalAudioSource>();
+
+	private static bool keepFadingIn;
+	private static bool keepFadingOut;
 
 	void Awake()
 	{
@@ -27,6 +31,7 @@ public class SoundManager : MonoBehaviour
 			Instance = this;
 			//DontDestroyOnLoad(gameObject);
 		}
+		sounds = Resources.LoadAll<Sound>(soundPath);
 		foreach (Sound s in sounds)
 		{
 			s.source = gameObject.AddComponent<AudioSource>();
@@ -37,10 +42,8 @@ public class SoundManager : MonoBehaviour
 		Transform positionalSourceParent = new GameObject("Positional Audio Sources").transform;
         for (int i = 0; i < numOfPositionalSources; i++)
         {
-			AudioSource newPositional = new GameObject().AddComponent<AudioSource>();
+			PositionalAudioSource newPositional = new GameObject("Positional Audio Source").AddComponent<PositionalAudioSource>();
 			newPositional.transform.parent = positionalSourceParent;
-			newPositional.spatialBlend = 1;
-			newPositional.maxDistance = 15;
 			positionalSources.Enqueue(newPositional);
         }
 	}
@@ -72,7 +75,7 @@ public class SoundManager : MonoBehaviour
 	/// </summary>
 	/// <param soundID="soundID">The ID for the sound. Can be retrieved with GetSoundID().</param>
 	/// <returns>The AudioSource that is playing the sound. null if sound not found.</returns>
-	public AudioSource PlaySoundAtPosition(int soundID, Vector3 position)
+	public PositionalAudioSource PlaySoundAtPosition(int soundID, Vector3 position)
     {
 		if (soundID < 0 || soundID >= sounds.Length)
 		{
@@ -81,14 +84,10 @@ public class SoundManager : MonoBehaviour
 		}
 		Sound sound = sounds[soundID];
 
-		AudioSource source = positionalSources.Dequeue();
-		source.volume = sound.volume * (1f + UnityEngine.Random.Range(-sound.volumeVariance / 2f, sound.volumeVariance / 2f));
-		source.pitch = sound.pitch * (1f + UnityEngine.Random.Range(-sound.pitchVariance / 2f, sound.pitchVariance / 2f));
-		source.minDistance = sound.minimunDistance;
+		PositionalAudioSource source = positionalSources.Dequeue();
+		source.SetSound(sound);
 		source.transform.position = position;
-		source.clip = sound.GetRandomAudioClip();
 		source.Play();
-		source.transform.SetParent(null); // in case parent has been set before.
 		positionalSources.Enqueue(source);
 		return source;
 	}
@@ -99,10 +98,29 @@ public class SoundManager : MonoBehaviour
 	/// <param soundID="soundID">The ID for the sound. Can be retrieved with GetSoundID().</param>
 	/// <param parent="parent"> The transform the AudioSource should be parented to. </param>
 	/// <returns>The AudioSource that is playing the sound. null if not found.</returns>
-	public AudioSource PlaySoundAtPosition(int soundID, Vector3 position, Transform parent)
+	public PositionalAudioSource PlaySoundAtPosition(int soundID, Vector3 position, Transform parent)
 	{
-		AudioSource source = PlaySoundAtPosition(soundID, position);
-		source.transform.SetParent(parent);
+		PositionalAudioSource source = PlaySoundAtPosition(soundID, position);
+		source.SetFollowTarget(parent);
+		return source;
+	}
+
+	public PositionalAudioSource PlaySoundAtPositionRandomDelay(int soundID, Vector3 position, float delayMax)
+	{
+		if (soundID < 0 || soundID >= sounds.Length)
+		{
+			Debug.LogWarning("Invalid Sound ID: " + soundID);
+			return null;
+		}
+		Sound sound = sounds[soundID];
+
+		PositionalAudioSource source = positionalSources.Dequeue();
+		float delay = UnityEngine.Random.Range(0, delayMax);
+		source.SetSound(sound);
+		source.SetDelay(delay);
+		source.transform.position = position;
+		source.Play();
+		positionalSources.Enqueue(source);
 		return source;
 	}
 
@@ -132,11 +150,50 @@ public class SoundManager : MonoBehaviour
 	/// <returns>The soundID. -1 if the sound is not found.</returns>
 	public int GetSoundID(string name)
     {
-		int id = Array.FindIndex(sounds, sound => sound.Name == name);
+		int id = Array.FindIndex(sounds, sound => sound.name == name);
 		if (id == -1)
         {
 			Debug.LogWarning("Sound with name: " + name + " does not exist!");
         }
 		return id;
     }
+
+	public static void FadeInCaller(AudioSource track, float speed, float maxVolume)
+    {
+		Instance.StartCoroutine(Instance.FadeIn(track, speed, maxVolume));
+    }
+	public static void FadeOutCaller(AudioSource track, float speed)
+	{
+		Instance.StartCoroutine(Instance.FadeOut(track, speed));
+	}
+	IEnumerator FadeIn(AudioSource track, float speed, float maxVolume)
+    {
+		keepFadingIn = true;
+		keepFadingOut = false;
+
+		track.volume = 0;
+		float audioVolume = track.volume;
+
+		while(track.volume < maxVolume && keepFadingIn)
+        {
+			audioVolume += speed;
+			track.volume = audioVolume;
+			yield return new WaitForSeconds(0.1f);
+        }
+    }
+	IEnumerator FadeOut(AudioSource track, float speed)
+	{
+		keepFadingIn = false;
+		keepFadingOut = true;
+
+		
+		float audioVolume = track.volume;
+
+		while (track.volume >= speed && keepFadingOut)
+		{
+			audioVolume -= speed;
+			track.volume = audioVolume;
+			yield return new WaitForSeconds(0.1f);
+		}
+	}
 }

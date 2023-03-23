@@ -12,8 +12,8 @@ public class PoolObject : MonoBehaviour
 
     private void Awake()
     {
-        particles = GetComponent<ParticleSystem>();
-        audioSource = GetComponent<AudioSource>();
+        particles = GetComponentInChildren<ParticleSystem>();
+        audioSource = GetComponentInChildren<AudioSource>();
     }
 
     protected virtual void OnEnable()
