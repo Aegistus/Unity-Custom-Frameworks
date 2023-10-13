@@ -6,7 +6,8 @@ using System;
 public class PoolManager : MonoBehaviour
 {
     public static PoolManager Instance { get; private set; }
-    public Pool[] pools;
+    public string poolObjectPath = "Pool Objects";
+    PoolObject[] poolObjects;
 
     private void Awake()
     {
@@ -18,59 +19,43 @@ public class PoolManager : MonoBehaviour
         {
             Destroy(this);
         }
+        DontDestroyOnLoad(gameObject);
         GameObject poolParent = new GameObject("PoolParent");
+        poolParent.transform.SetParent(transform);
         GameObject obj;
-        foreach (Pool pool in pools)
+        poolObjects = Resources.LoadAll<PoolObject>(poolObjectPath);
+        foreach (PoolObject poolObject in poolObjects)
         {
-            for (int i = 0; i < pool.size; i++)
+            for (int i = 0; i < poolObject.instanceCount; i++)
             {
-                obj = Instantiate(pool.objectPrefab, Vector3.one * 1000, Quaternion.identity, poolParent.transform);
-                PoolObject poolObj = obj.AddComponent<PoolObject>();
-                poolObj.lifeTime = 10f;
+                obj = Instantiate(poolObject.prefab, Vector3.one * 1000, Quaternion.identity, poolParent.transform);
+                PoolInstance poolInstance = obj.AddComponent<PoolInstance>();
+                poolInstance.lifeTime = 10f;
                 obj.SetActive(false);
-                pool.PlaceInQueue(poolObj);
+                poolObject.PlaceInQueue(poolInstance);
             }
         }
     }
 
-    [System.Serializable]
-    public class Pool
-    {
-        [SerializeField] string objectName;
-        public string Name => objectName;
-        public GameObject objectPrefab;
-        public int size;
-        private Queue<PoolObject> inPool = new Queue<PoolObject>();
-
-        public PoolObject GetNextInQueue()
-        {
-            return inPool.Dequeue();
-        }
-
-        public void PlaceInQueue(PoolObject obj)
-        {
-            inPool.Enqueue(obj);
-        }
-    }
-
-    PoolObject objectFromPool;
+    PoolInstance objectFromPool;
     /// <summary>
 	/// Spawns a pool object with the given objectID at the given position and rotation.
     /// Logs a warning if the objectID is invalid.
 	/// </summary>
 	/// <returns> The pool object's GameObject. null if the objectID is invalid. </returns>
-    public GameObject SpawnObject(int objectID, Vector3 position, Quaternion rotation)
+    public GameObject SpawnObject(string objectID, Vector3 position, Quaternion rotation)
     {
-        if (objectID < 0 || objectID >= pools.Length)
+        int poolIndex = Array.FindIndex(poolObjects, pool => pool.name == objectID);
+        if (poolIndex < 0 || poolIndex >= poolObjects.Length)
         {
             Debug.LogWarning("Invalid Pool Object ID");
             return null;
         }
-        objectFromPool = pools[objectID].GetNextInQueue();
+        objectFromPool = poolObjects[poolIndex].GetNextInQueue();
         objectFromPool.transform.position = position;
         objectFromPool.transform.rotation = rotation;
         objectFromPool.gameObject.SetActive(true);
-        pools[objectID].PlaceInQueue(objectFromPool);
+        poolObjects[poolIndex].PlaceInQueue(objectFromPool);
         return objectFromPool.gameObject;
     }
 
@@ -80,19 +65,20 @@ public class PoolManager : MonoBehaviour
     /// Logs a warning if the objectID is invalid.
 	/// </summary>
 	/// <returns> The pool object's GameObject. null if the objectID is invalid. </returns>
-    public GameObject SpawnObjectWithLifetime(int objectID, Vector3 position, Quaternion rotation, float lifeTime)
+    public GameObject SpawnObjectWithLifetime(string objectID, Vector3 position, Quaternion rotation, float lifeTime)
     {
-        if (objectID < 0 || objectID >= pools.Length)
+        int poolIndex = Array.FindIndex(poolObjects, pool => pool.name == objectID);
+        if (poolIndex < 0 || poolIndex >= poolObjects.Length)
         {
-            Debug.LogWarning("Invalid Pool Object ID");
+            Debug.LogWarning("Invalid Pool Object ID:");
             return null;
         }
-        objectFromPool = pools[objectID].GetNextInQueue();
+        objectFromPool = poolObjects[poolIndex].GetNextInQueue();
         objectFromPool.lifeTime = lifeTime;
         objectFromPool.transform.position = position;
         objectFromPool.transform.rotation = rotation;
         objectFromPool.gameObject.SetActive(true);
-        pools[objectID].PlaceInQueue(objectFromPool);
+        poolObjects[poolIndex].PlaceInQueue(objectFromPool);
         return objectFromPool.gameObject;
     }
 
@@ -101,31 +87,32 @@ public class PoolManager : MonoBehaviour
     /// Logs a warning if the objectID is invalid.
 	/// </summary>
 	/// <returns> The pool object's GameObject. null if the objectID is invalid. </returns>
-    public GameObject SpawnObjectWithLifetime(int objectID, Vector3 position, Quaternion rotation, Vector3 scale, float lifeTime)
+    public GameObject SpawnObjectWithLifetime(string objectID, Vector3 position, Quaternion rotation, Vector3 scale, float lifeTime)
     {
-        if (objectID < 0 || objectID >= pools.Length)
+        int poolIndex = Array.FindIndex(poolObjects, pool => pool.name == objectID);
+        if (poolIndex < 0 || poolIndex >= poolObjects.Length)
         {
             Debug.LogWarning("Invalid Pool Object ID");
             return null;
         }
-        objectFromPool = pools[objectID].GetNextInQueue();
+        objectFromPool = poolObjects[poolIndex].GetNextInQueue();
         objectFromPool.lifeTime = lifeTime;
         objectFromPool.transform.position = position;
         objectFromPool.transform.rotation = rotation;
         objectFromPool.transform.localScale = scale;
         objectFromPool.gameObject.SetActive(true);
-        pools[objectID].PlaceInQueue(objectFromPool);
+        poolObjects[poolIndex].PlaceInQueue(objectFromPool);
         return objectFromPool.gameObject;
 
     }
 
     /// <summary>
-	/// Gets the objectID of a poolObject given it's name.
+	/// [deprecated] Gets the objectID of a poolObject given it's name.
 	/// </summary>
 	/// <returns> The PoolObject's integer ID. -1 if not found. </returns>
     public int GetPoolObjectID(string objectName)
     {
-        int id = Array.FindIndex(pools, pool => pool.Name == objectName);
+        int id = Array.FindIndex(poolObjects, poolObject => poolObject.name == objectName);
 		if (id == -1)
         {
 			Debug.LogWarning("Pool Object with name: " + name + " does not exist!");

@@ -1,46 +1,28 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoolObject : MonoBehaviour
+[CreateAssetMenu(fileName = "New Pool Object", menuName = "Pool Object")]
+public class PoolObject : ScriptableObject
 {
-    public float lifeTime;
+    /// <summary>
+    /// Prefab of the object.
+    /// </summary>
+    public GameObject prefab;
+    /// <summary>
+    /// How many instances should be created at runtime.
+    /// </summary>
+    public int instanceCount;
 
-    private ParticleSystem particles;
-    private AudioSource audioSource;
-    private bool justSpawned = true;
+    private Queue<PoolInstance> inPool = new Queue<PoolInstance>();
 
-    private void Awake()
+    public PoolInstance GetNextInQueue()
     {
-        particles = GetComponentInChildren<ParticleSystem>();
-        audioSource = GetComponentInChildren<AudioSource>();
+        return inPool.Dequeue();
     }
 
-    protected virtual void OnEnable()
+    public void PlaceInQueue(PoolInstance obj)
     {
-        if (!justSpawned)
-        {
-            if (particles)
-            {
-                particles.Play();
-            }
-            if (audioSource)
-            {
-                audioSource.Play();
-            }
-            StartCoroutine(EndLifeTime());
-        }
-        else
-        {
-            justSpawned = false;
-        }
-    }
-
-    private IEnumerator EndLifeTime()
-    {
-        yield return new WaitForSeconds(lifeTime);
-        transform.localPosition = Vector3.zero;
-        transform.rotation = Quaternion.identity;
-        gameObject.SetActive(false);
+        inPool.Enqueue(obj);
     }
 }
